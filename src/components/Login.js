@@ -3,6 +3,8 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
 
+import styled from "styled-components";
+
 const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -27,46 +29,49 @@ const Login = () => {
   };
 
   return (
-    <>
-      <main style={{ margin: 10 }}>
-        <section>
-          <div>
-            <p>听写 Admin</p>
-
-            <form>
-              <div>
-                <label htmlFor="email-address">Email address</label>
-                <input
-                  id="email-address"
-                  name="email"
-                  type="email"
-                  required
-                  placeholder="Email address"
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
-
-              <div>
-                <label htmlFor="password">Password</label>
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  required
-                  placeholder="Password"
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
-
-              <div>
-                <button onClick={onLogin}>Login</button>
-              </div>
-            </form>
-          </div>
-        </section>
-      </main>
-    </>
+    <DivMargin>
+      <p>听写 Admin</p>
+      <form>
+        <DivMarginBottom>
+          <LabelMarginRight htmlFor="email-address">
+            Email address
+          </LabelMarginRight>
+          <input
+            id="email-address"
+            name="email"
+            type="email"
+            required
+            placeholder="Email address"
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </DivMarginBottom>
+        <DivMarginBottom>
+          <LabelMarginRight htmlFor="password">Password</LabelMarginRight>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            required
+            placeholder="Password"
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </DivMarginBottom>
+        <div>
+          <button onClick={onLogin}>Login</button>
+        </div>
+      </form>
+    </DivMargin>
   );
 };
 
 export default Login;
+
+const DivMargin = styled.div`
+  margin: 10px;
+`;
+const DivMarginBottom = styled.div`
+  margin-bottom: 10px;
+`;
+const LabelMarginRight = styled.label`
+  margin-right: 5px;
+`;

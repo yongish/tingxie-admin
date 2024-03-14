@@ -3,7 +3,10 @@ import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
 
+import styled from "styled-components";
+
 const Home = () => {
+  const navigate = useNavigate();
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -16,9 +19,7 @@ const Home = () => {
         navigate("/login");
       }
     });
-  }, []);
-
-  const navigate = useNavigate();
+  }, [navigate]);
 
   const handleLogout = () => {
     signOut(auth)
@@ -32,16 +33,18 @@ const Home = () => {
   };
 
   return (
-    <>
-      <nav>
-        <p>Welcome Home</p>
+    <DivMargin>
+      <p>Welcome Home</p>
 
-        <div>
-          <button onClick={handleLogout}>Logout</button>
-        </div>
-      </nav>
-    </>
+      <div>
+        <button onClick={handleLogout}>Logout</button>
+      </div>
+    </DivMargin>
   );
 };
 
 export default Home;
+
+const DivMargin = styled.div`
+  margin: 10px;
+`;
