@@ -13,9 +13,7 @@ const Home = () => {
         // ...
         console.log("uid", uid);
       } else {
-        // User is signed out
-        // ...
-        console.log("user is logged out");
+        navigate("/login");
       }
     });
   }, []);
@@ -26,8 +24,7 @@ const Home = () => {
     signOut(auth)
       .then(() => {
         // Sign-out successful.
-        navigate("/");
-        console.log("Signed out successfully");
+        navigate("/login");
       })
       .catch((error) => {
         // An error happened.

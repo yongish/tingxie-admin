@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -14,7 +14,7 @@ const Login = () => {
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-        navigate("/home");
+        navigate("/");
         console.log(user);
       })
       .catch((error) => {
@@ -23,16 +23,15 @@ const Login = () => {
         console.log(errorCode, errorMessage);
 
         // todo: Display invalid credentials.
-
       });
   };
 
   return (
     <>
-      <main>
+      <main style={{ margin: 10 }}>
         <section>
           <div>
-            <p> FocusApp </p>
+            <p>听写 Admin</p>
 
             <form>
               <div>
@@ -63,10 +62,6 @@ const Login = () => {
                 <button onClick={onLogin}>Login</button>
               </div>
             </form>
-
-            <p className="text-sm text-white text-center">
-              No account yet? <NavLink to="/signup">Sign up</NavLink>
-            </p>
           </div>
         </section>
       </main>
