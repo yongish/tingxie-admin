@@ -4,29 +4,33 @@ import { auth } from "./firebase";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Button from "react-bootstrap/Button";
-import Tab from "react-bootstrap/Tab";
-import Tabs from "react-bootstrap/Tabs";
 import TextareaAutosize from "react-textarea-autosize";
 import ImageTabs from "./ImageTabs";
+import { Table } from "react-bootstrap";
+import { getHost } from "./env";
 
 const Home = () => {
+  const [exerciseMetadata, setExerciseMetadata] = useState({});
+
   const navigate = useNavigate();
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // User is signed in, see docs for a list of available properties
-        // https://firebase.google.com/docs/reference/js/firebase.User
-        const uid = user.uid;
-        // ...
-        console.log("uid", uid);
-      } else {
-        navigate("/login");
-      }
-    });
-  }, [navigate]);
+  // useEffect(() => {
+  //   onAuthStateChanged(auth, (user) => {
+  //     if (user) {
+  //       // User is signed in, see docs for a list of available properties
+  //       // https://firebase.google.com/docs/reference/js/firebase.User
+  //       const uid = user.uid;
+  //       // ...
+  //       console.log("uid", uid);
+  //     } else {
+  //       navigate("/login");
+  //     }
+  //   });
+  // }, [navigate]);
 
   useEffect(() => {
-    // Load original page here.
+    fetch(`${getHost()}exercises-metadata`)
+      .then((response) => response.json())
+      .then((data) => setExerciseMetadata(data));
   }, []);
 
   const handleLogout = () => {
@@ -42,19 +46,38 @@ const Home = () => {
 
   return (
     <DivMargin>
-      <p>Welcome Home</p>
-      <div>
-        <BtnMarginBottom onClick={() => {}}>Save (unimplemented)</BtnMarginBottom>
-      </div>
-      <div style={{ display: "flex", alignItems: "center" }}>
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <ImageTabs />
-        </div>
-        <TextareaAutosize value="Hello World" cols={80} />
-      </div>
       <div>
         <button onClick={handleLogout}>Logout</button>
       </div>
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Username</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Mark</td>
+            <td>Otto</td>
+            <td>@mdo</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Jacob</td>
+            <td>Thornton</td>
+            <td>@fat</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td colSpan={2}>Larry the Bird</td>
+            <td>@twitter</td>
+          </tr>
+        </tbody>
+      </Table>
     </DivMargin>
   );
 };
