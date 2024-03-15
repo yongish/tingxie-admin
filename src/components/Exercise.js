@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "./firebase";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Button from "react-bootstrap/Button";
-import Tab from "react-bootstrap/Tab";
-import Tabs from "react-bootstrap/Tabs";
 import TextareaAutosize from "react-textarea-autosize";
 import ImageTabs from "./ImageTabs";
 
-const Home = () => {
+const Exercise = () => {
   const navigate = useNavigate();
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -59,7 +57,7 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Exercise;
 
 const DivMargin = styled.div`
   margin: 10px;
