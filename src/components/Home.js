@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import { auth } from "../firebase";
+import { auth } from "./firebase";
 import Button from 'react-bootstrap/Button';
 import { useNavigate } from "react-router-dom";
 import TextareaAutosize from "react-textarea-autosize";
