@@ -1,10 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Home from "./components/Home";
 import Login from "./components/Login";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { auth } from "./components/firebase";
 
 import "./App.css";
-import PrivateRoute from "./components/PrivateRoute";
+
+function RequireAuth({ children }) {
+  if (auth.currentUser) {
+    return children;
+  }
+  return <Navigate to="/login" />;
+}
 
 function App() {
   return (
@@ -12,10 +24,14 @@ function App() {
       <div>
         <section>
           <Routes>
-            <Route path="/" element={<Home />} />
-            {/* <PrivateRoute>
-              <Route path="/" element={<Home />} />
-            </PrivateRoute> */}
+            <Route
+              path="/"
+              element={
+                <RequireAuth>
+                  <Home />
+                </RequireAuth>
+              }
+            />
             <Route path="/login" element={<Login />} />
           </Routes>
         </section>
