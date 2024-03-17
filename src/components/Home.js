@@ -7,7 +7,7 @@ import Button from "react-bootstrap/Button";
 import TextareaAutosize from "react-textarea-autosize";
 import ImageTabs from "./ImageTabs";
 import { Table } from "react-bootstrap";
-import { getHost } from "./env";
+import { getHost } from "./utils/env";
 
 const Home = () => {
   const [exerciseMetadata, setExerciseMetadata] = useState({});
@@ -27,11 +27,11 @@ const Home = () => {
   //   });
   // }, [navigate]);
 
-  useEffect(() => {
-    fetch(`${getHost()}exercises-metadata`)
-      .then((response) => response.json())
-      .then((data) => setExerciseMetadata(data));
-  }, []);
+  // useEffect(() => {
+  //   fetch(`${getHost()}exercises-metadata`)
+  //     .then((response) => response.json())
+  //     .then((data) => setExerciseMetadata(data));
+  // }, []);
 
   const handleLogout = () => {
     signOut(auth)

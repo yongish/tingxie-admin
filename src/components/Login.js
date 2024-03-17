@@ -4,6 +4,7 @@ import { auth } from "./firebase";
 import { useNavigate } from "react-router-dom";
 
 import styled from "styled-components";
+import { getHost } from "./utils/env";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -16,6 +17,25 @@ const Login = () => {
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
+
+        user
+          .getIdToken(true)
+          .then((idToken) => {
+            console.log("idToken", idToken);
+            // Store token in cookie.
+            fetch(`${getHost()}tokens`, {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                email: user.email,
+                token: idToken,
+              }),
+            });
+          })
+          .catch((error) => console.error(error));
+
         navigate("/");
         console.log(user);
       })
