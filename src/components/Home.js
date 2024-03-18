@@ -1,37 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import { signOut } from "firebase/auth";
 import { auth } from "./firebase";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Button from "react-bootstrap/Button";
-import TextareaAutosize from "react-textarea-autosize";
-import ImageTabs from "./ImageTabs";
 import { Table } from "react-bootstrap";
 import { getHost } from "./utils/env";
+import { parseZonedDateTime } from "@internationalized/date";
 
 const Home = () => {
-  const [exerciseMetadata, setExerciseMetadata] = useState({});
+  const [exerciseMetadata, setExerciseMetadata] = useState([]);
 
   const navigate = useNavigate();
-  // useEffect(() => {
-  //   onAuthStateChanged(auth, (user) => {
-  //     if (user) {
-  //       // User is signed in, see docs for a list of available properties
-  //       // https://firebase.google.com/docs/reference/js/firebase.User
-  //       const uid = user.uid;
-  //       // ...
-  //       console.log("uid", uid);
-  //     } else {
-  //       navigate("/login");
-  //     }
-  //   });
-  // }, [navigate]);
 
-  // useEffect(() => {
-  //   fetch(`${getHost()}exercises-metadata`)
-  //     .then((response) => response.json())
-  //     .then((data) => setExerciseMetadata(data));
-  // }, []);
+  useEffect(() => {
+    fetch(`${getHost()}exercises-metadata`)
+      .then((response) => response.json())
+      .then((data) => setExerciseMetadata(data));
+  }, []);
 
   const handleLogout = () => {
     signOut(auth)
@@ -46,36 +32,47 @@ const Home = () => {
 
   return (
     <DivMargin>
-      <div>
-        <button onClick={handleLogout}>Logout</button>
-      </div>
+      <BtnMarginBottom onClick={handleLogout}>Logout</BtnMarginBottom>
       <Table striped bordered hover>
         <thead>
           <tr>
             <th>#</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Username</th>
+            <th>Source</th>
+            <th>Exercise Type</th>
+            <th>Last Edited By</th>
+            <th>Last Edited At</th>
+            <th>Created At</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>1</td>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td colSpan={2}>Larry the Bird</td>
-            <td>@twitter</td>
-          </tr>
+          {exerciseMetadata.map((item, i) => {
+            const {
+              source,
+              exerciseTypeId,
+              createdAt,
+              lastEditedAt,
+              lastEditedBy,
+            } = item;
+            return (
+              <tr>
+                <td>{i + 1}</td>
+                <td>{source}</td>
+                <td>{exerciseTypeId === 0 ? "短文填空" : "选词填空"}</td>
+                <td>
+                  <DivOppositeEnds>
+                    {lastEditedBy}
+                    <Button onClick={() => {}}>Edit</Button>
+                  </DivOppositeEnds>
+                </td>
+                <td>
+                  {parseZonedDateTime(lastEditedAt).toDate().toLocaleString()}
+                </td>
+                <td>
+                  {parseZonedDateTime(createdAt).toDate().toLocaleString()}
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </Table>
     </DivMargin>
@@ -89,4 +86,8 @@ const DivMargin = styled.div`
 `;
 const BtnMarginBottom = styled(Button)`
   margin-bottom: 10px;
+`;
+const DivOppositeEnds = styled.div`
+  display: flex;
+  justify-content: space-between;
 `;
