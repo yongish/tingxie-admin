@@ -1,23 +1,17 @@
 import React from "react";
 import { Tab, Tabs } from "react-bootstrap";
 
-const ImageTabs = () => {
+const ImageTabs = ({ pageUrl, secondLastPageUrl, lastPageUrl }) => {
   return (
-    <Tabs defaultActiveKey="questionPage" className="mb-3" >
-      <Tab eventKey="questionPage" title="QuestionPage">
-        <img
-          src={
-            "https://gitlab.com/yongish/question-parsing/-/raw/main/gray.png"
-          }
-          width={750}
-          alt=""
-        />
+    <Tabs defaultActiveKey="questionPage" className="mb-3">
+      <Tab eventKey="questionPage" title="Question Page">
+        <img src={pageUrl} width={750} alt="" />
       </Tab>
-      <Tab eventKey="profile" title="Profile">
-        Tab content for Profile
+      <Tab eventKey="profile" title="2nd Last Page">
+        <img src={secondLastPageUrl} width={750} alt="" />
       </Tab>
-      <Tab eventKey="contact" title="Contact">
-        Tab content for Contact
+      <Tab eventKey="contact" title="Last Page">
+        <img src={lastPageUrl} width={750} alt="" />
       </Tab>
     </Tabs>
   );

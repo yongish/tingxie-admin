@@ -1,22 +1,43 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "./firebase";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import Button from "react-bootstrap/Button";
 import TextareaAutosize from "react-textarea-autosize";
 import ImageTabs from "./ImageTabs";
+import { getHost } from "./utils/env";
 
 const Exercise = () => {
+  // const {
+  //   state: { id },
+  // } = useLocation();
+  const { id } = useParams();
   const navigate = useNavigate();
+
+  const [exerciseData, setExerciseData] = useState({});
+  const {
+    source,
+    sourceUrl,
+    pageNumber,
+    rawString,
+    exerciseType,
+    createdAt,
+    pageUrl,
+    secondLastPageUrl,
+    lastPageUrl,
+    lastEditedBy,
+    lastEditedAt,
+  } = exerciseData;
+
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/firebase.User
-        const uid = user.uid;
+        // const uid = user.uid;
         // ...
-        console.log("uid", uid);
+        // console.log("uid", uid);
       } else {
         navigate("/login");
       }
@@ -25,33 +46,43 @@ const Exercise = () => {
 
   useEffect(() => {
     // Load original page here.
-  }, []);
-
-  const handleLogout = () => {
-    signOut(auth)
-      .then(() => {
-        // Sign-out successful.
-        navigate("/login");
-      })
-      .catch((error) => {
-        // An error happened.
-      });
-  };
+    // todo: get exercise string
+    fetch(`${getHost()}exercise-data/${id}`)
+      .then((response) => response.json())
+      .then((data) => setExerciseData(data));
+  }, [id]);
 
   return (
     <DivMargin>
-      <p>Welcome Home</p>
-      <div>
-        <BtnMarginBottom onClick={() => {}}>Save (unimplemented)</BtnMarginBottom>
-      </div>
       <div style={{ display: "flex", alignItems: "center" }}>
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <ImageTabs />
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <ImageTabs
+            pageUrl={pageUrl}
+            secondLastPageUrl={secondLastPageUrl}
+            lastPageUrl={lastPageUrl}
+          />
         </div>
-        <TextareaAutosize value="Hello World" cols={80} />
-      </div>
-      <div>
-        <button onClick={handleLogout}>Logout</button>
+        <div>
+          <TextareaAutosize
+            value={rawString}
+            onChange={(e) =>
+              setExerciseData({ ...exerciseData, rawString: e.data })
+            }
+            cols={80}
+          />
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <Button onClick={() => navigate("/")} variant="secondary">
+              Cancel
+            </Button>
+            <Button onClick={() => {}}>Save (unimplemented)</Button>
+          </div>
+        </div>
       </div>
     </DivMargin>
   );
@@ -61,7 +92,4 @@ export default Exercise;
 
 const DivMargin = styled.div`
   margin: 10px;
-`;
-const BtnMarginBottom = styled(Button)`
-  margin-bottom: 10px;
 `;

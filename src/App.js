@@ -10,6 +10,7 @@ import {
 import { auth } from "./components/firebase";
 
 import "./App.css";
+import Exercise from "./components/Exercise";
 
 function RequireAuth({ children }) {
   if (auth.currentUser) {
@@ -24,6 +25,7 @@ function App() {
       <div>
         <section>
           <Routes>
+            <Route path="/login" element={<Login />} />
             <Route
               path="/"
               element={
@@ -32,7 +34,14 @@ function App() {
                 </RequireAuth>
               }
             />
-            <Route path="/login" element={<Login />} />
+            <Route
+              path="/exercise/:id"
+              element={
+                <RequireAuth>
+                  <Exercise />
+                </RequireAuth>
+              }
+            />
           </Routes>
         </section>
       </div>

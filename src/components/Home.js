@@ -4,12 +4,15 @@ import { auth } from "./firebase";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Button from "react-bootstrap/Button";
-import { Table } from "react-bootstrap";
+import Form from "react-bootstrap/Form";
+import Table from "react-bootstrap/Table";
 import { getHost } from "./utils/env";
 import { parseZonedDateTime } from "@internationalized/date";
 
 const Home = () => {
   const [exerciseMetadata, setExerciseMetadata] = useState([]);
+  const [showEdited, setShowEdited] = useState(true);
+  const [showNotEdited, setShowNotEdited] = useState(true);
 
   const navigate = useNavigate();
 
@@ -32,7 +35,25 @@ const Home = () => {
 
   return (
     <DivMargin>
-      <BtnMarginBottom onClick={handleLogout}>Logout</BtnMarginBottom>
+      <DivOppositeEnds>
+        <BtnMarginBottom onClick={handleLogout}>Logout</BtnMarginBottom>
+        <div style={{ display: "flex" }}>
+          <CheckMargin
+            type="checkbox"
+            id="edited"
+            label="Edited"
+            checked={showEdited}
+            onChange={() => setShowEdited(!showEdited)}
+          />
+          <CheckMargin
+            type="checkbox"
+            id="not-edited"
+            label="Not Edited"
+            checked={showNotEdited}
+            onChange={() => setShowNotEdited(!showNotEdited)}
+          />
+        </div>
+      </DivOppositeEnds>
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -47,12 +68,14 @@ const Home = () => {
         <tbody>
           {exerciseMetadata.map((item, i) => {
             const {
+              id,
               source,
               exerciseTypeId,
               createdAt,
               lastEditedAt,
               lastEditedBy,
             } = item;
+            console.log("iiiiiii", id);
             return (
               <tr>
                 <td>{i + 1}</td>
@@ -61,7 +84,9 @@ const Home = () => {
                 <td>
                   <DivOppositeEnds>
                     {lastEditedBy}
-                    <Button onClick={() => {}}>Edit</Button>
+                    <Button onClick={() => navigate(`/exercise/${id}`)}>
+                      Edit
+                    </Button>
                   </DivOppositeEnds>
                 </td>
                 <td>
@@ -90,4 +115,7 @@ const BtnMarginBottom = styled(Button)`
 const DivOppositeEnds = styled.div`
   display: flex;
   justify-content: space-between;
+`;
+const CheckMargin = styled(Form.Check)`
+  margin: 5px;
 `;
