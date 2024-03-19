@@ -17,9 +17,11 @@ const Home = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`${getHost()}exercises-metadata`)
+    fetch(`${getHost()}exercises-metadata`, { credentials: "include" })
       .then((response) => response.json())
-      .then((data) => setExerciseMetadata(data));
+      .then((data) => {
+        setExerciseMetadata(data)
+      });
   }, []);
 
   const handleLogout = () => {
@@ -75,7 +77,6 @@ const Home = () => {
               lastEditedAt,
               lastEditedBy,
             } = item;
-            console.log("iiiiiii", id);
             return (
               <tr>
                 <td>{i + 1}</td>

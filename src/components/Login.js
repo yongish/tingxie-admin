@@ -25,7 +25,7 @@ const Login = () => {
           .then((token) => {
             console.log("token", token);
             // Store token in cookie.
-            setCookie("name", token);
+            setCookie("token", token);
 
             fetch(`${getHost()}tokens`, {
               method: "PUT",
