@@ -78,7 +78,7 @@ const Home = () => {
               lastEditedBy,
             } = item;
             return (
-              <tr>
+              <tr key={id}>
                 <td>{i + 1}</td>
                 <td>{source}</td>
                 <td>{exerciseTypeId === 0 ? "短文填空" : "选词填空"}</td>

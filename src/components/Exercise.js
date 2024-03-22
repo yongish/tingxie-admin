@@ -47,7 +47,7 @@ const Exercise = () => {
   useEffect(() => {
     // Load original page here.
     // todo: get exercise string
-    fetch(`${getHost()}exercise-data/${id}`)
+    fetch(`${getHost()}exercise-data/${id}`, { credentials: "include" })
       .then((response) => response.json())
       .then((data) => setExerciseData(data));
   }, [id]);
