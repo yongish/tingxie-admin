@@ -59,6 +59,7 @@ const Exercise = () => {
       <div style={{ display: "flex", alignItems: "center" }}>
         <div style={{ display: "flex", flexDirection: "column" }}>
           <ImageTabs
+            sourceUrl={sourceUrl}
             pageUrl={pageUrl}
             secondLastPageUrl={secondLastPageUrl}
             lastPageUrl={lastPageUrl}
