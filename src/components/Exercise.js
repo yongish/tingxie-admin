@@ -49,7 +49,9 @@ const Exercise = () => {
     // todo: get exercise string
     fetch(`${getHost()}exercise-data/${id}`, { credentials: "include" })
       .then((response) => response.json())
-      .then((data) => setExerciseData(data));
+      .then((data) => {
+        setExerciseData(data)
+      });
   }, [id]);
 
   return (
@@ -78,7 +80,7 @@ const Exercise = () => {
             }}
           >
             <Button onClick={() => navigate("/")} variant="secondary">
-              Cancel
+              Cancel (Go Back)
             </Button>
             <Button onClick={() => {}}>Save (unimplemented)</Button>
           </div>
