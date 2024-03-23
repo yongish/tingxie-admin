@@ -20,7 +20,7 @@ const Home = () => {
     fetch(`${getHost()}exercises-metadata`, { credentials: "include" })
       .then((response) => response.json())
       .then((data) => {
-        setExerciseMetadata(data)
+        setExerciseMetadata(data);
       });
   }, []);
 
@@ -73,8 +73,8 @@ const Home = () => {
               id,
               source,
               exerciseTypeId,
-              createdAt,
-              lastEditedAt,
+              createdAt = "1970-01-01 00:00:00.000000-00",
+              lastEditedAt = "1970-01-01 00:00:00.000000-00",
               lastEditedBy,
             } = item;
             return (
@@ -85,7 +85,10 @@ const Home = () => {
                 <td>
                   <DivOppositeEnds>
                     {lastEditedBy}
-                    <Button onClick={() => navigate(`/exercise/${id}`)}>
+                    <Button
+                      onClick={() => navigate(`/exercise/${id}`)}
+                      style={{ marginLeft: "5px" }}
+                    >
                       Edit
                     </Button>
                   </DivOppositeEnds>
