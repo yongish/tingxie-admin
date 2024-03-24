@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "./firebase";
 import { useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
 
 import styled from "styled-components";
 import { getHost } from "./utils/env";
@@ -11,7 +10,6 @@ const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [cookies, setCookie] = useCookies(["token"]);
 
   const onLogin = (e) => {
     e.preventDefault();
@@ -24,8 +22,6 @@ const Login = () => {
           .getIdToken(true)
           .then((token) => {
             console.log("token", token);
-            // Store token in cookie.
-            setCookie("token", token);
 
             fetch(`${getHost()}tokens`, {
               method: "PUT",
@@ -36,12 +32,9 @@ const Login = () => {
                 email: user.email,
                 token,
               }),
-            });
+            }).then(() => navigate("/", { state: { token } }));
           })
           .catch((error) => console.error(error));
-
-        navigate("/");
-        console.log(user);
       })
       .catch((error) => {
         const errorCode = error.code;

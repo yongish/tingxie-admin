@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
@@ -18,6 +18,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 
 const Exercise = () => {
   const { id } = useParams();
+  const location = useLocation();
   const navigate = useNavigate();
 
   const [exerciseData, setExerciseData] = useState({});
@@ -42,7 +43,9 @@ const Exercise = () => {
   useEffect(() => {
     // Load original page here.
     // todo: get exercise string
-    fetch(`${getHost()}exercise-data/${id}`, { credentials: "include" })
+    fetch(`${getHost()}exercise-data/${id}`, {
+      headers: { Authorization: `${location.state.token}` },
+    })
       .then((response) => response.json())
       .then((data) => {
         setExerciseData(data);
@@ -58,10 +61,10 @@ const Exercise = () => {
       ":00";
 
     fetch(`${getHost()}exercise-data`, {
-      credentials: "include",
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `${location.state.token}`,
       },
       body: JSON.stringify({
         ...exerciseData,

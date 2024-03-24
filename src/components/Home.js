@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { signOut } from "firebase/auth";
 import { auth } from "./firebase";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
@@ -14,10 +14,13 @@ const Home = () => {
   const [showEdited, setShowEdited] = useState(true);
   const [showNotEdited, setShowNotEdited] = useState(true);
 
+  const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`${getHost()}exercises-metadata`, { credentials: "include" })
+    fetch(`${getHost()}exercises-metadata`, {
+      headers: { Authorization: `${location.state.token}` },
+    })
       .then((response) => response.json())
       .then((data) => {
         setExerciseMetadata(data);
@@ -86,7 +89,11 @@ const Home = () => {
                   <DivOppositeEnds>
                     {lastEditedBy}
                     <Button
-                      onClick={() => navigate(`/exercise/${id}`)}
+                      onClick={() =>
+                        navigate(`/exercise/${id}`, {
+                          state: { token: location.state.token },
+                        })
+                      }
                       style={{ marginLeft: "5px" }}
                     >
                       Edit
