@@ -73,8 +73,8 @@ const Home = () => {
               id,
               source,
               exerciseTypeId,
-              createdAt = "1970-01-01 00:00:00.000000-00",
-              lastEditedAt = "1970-01-01 00:00:00.000000-00",
+              createdAt = "1970-01-00T00:00[UTC]",
+              lastEditedAt = "1970-01-00T00:00[UTC]",
               lastEditedBy,
             } = item;
             return (
