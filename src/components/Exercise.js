@@ -10,15 +10,18 @@ import styled from "styled-components";
 
 import { auth } from "./firebase";
 import { getHost } from "./utils/env";
+import { Spinner } from "react-bootstrap";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 const Exercise = () => {
   const { id } = useParams();
   const location = useLocation();
+  const token = location.state.token;
   const navigate = useNavigate();
 
   const [exerciseData, setExerciseData] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
   const { sourceUrl, rawString, questionPageNumber, answerPageNumber } =
     exerciseData;
   const [activeKey, setActiveKey] = useState("questionPageNumber");
@@ -41,7 +44,7 @@ const Exercise = () => {
     // Load original page here.
     // todo: get exercise string
     fetch(`${getHost()}exercise-data/${id}`, {
-      headers: { Authorization: `${location.state.token}` },
+      headers: { Authorization: `${token}` },
     })
       .then((response) => response.json())
       .then((data) => {
@@ -49,7 +52,9 @@ const Exercise = () => {
       });
   }, [id]);
 
-  const putExercise = () => {
+  const putExercise = (isDraft) => {
+    setIsLoading(true);
+
     var local = new Date();
     var lastEditedAt = local.toISOString();
 
@@ -63,12 +68,28 @@ const Exercise = () => {
         ...exerciseData,
         lastEditedBy: auth.currentUser.email,
         lastEditedAt,
+        isDraft
       }),
     })
-      .then(() => navigate("/"))
-      .catch((error) => console.error(error));
+      .then(() => navigate("/", { state: { token } }))
+      .catch((error) => console.error(error))
+      .finally(() => setIsLoading(false));
   };
 
+  if (isLoading) {
+    return (
+      <div
+        style={{
+          position: "absolute",
+          left: "50%",
+          top: "50%",
+          transform: "translate(-50%, -50%)",
+        }}
+      >
+        <Spinner />
+      </div>
+    );
+  }
   return (
     <DivMargin>
       <div style={{ display: "flex", alignItems: "center" }}>
@@ -140,15 +161,28 @@ const Exercise = () => {
                 alignItems: "center",
               }}
             >
-              <Button onClick={() => navigate("/")} variant="secondary">
-                Cancel (Go Back)
-              </Button>
+              <div>
+                <Button
+                  onClick={() => navigate("/", { state: { token } })}
+                  variant="secondary"
+                >
+                  Cancel (Go Back)
+                </Button>
+                <Button
+                  onClick={() => {
+                    putExercise(true);
+                  }}
+                  style={{ marginLeft: '5px' }}
+                >
+                  Save as Draft
+                </Button>
+              </div>
               <Button
                 onClick={() => {
-                  putExercise();
+                  putExercise(false);
                 }}
               >
-                Save
+                Save as Publish
               </Button>
             </div>
           </div>

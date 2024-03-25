@@ -10,21 +10,46 @@ import { getHost } from "./utils/env";
 
 const Home = () => {
   const [exerciseMetadata, setExerciseMetadata] = useState([]);
-  const [showEdited, setShowEdited] = useState(true);
-  const [showNotEdited, setShowNotEdited] = useState(true);
+  const [filteredExerciseMetadata, setFilteredExerciseMetadata] = useState([]);
+  const [showPublished, setShowPublished] = useState(true);
+  const [showNotPublished, setShowNotPublished] = useState(true);
 
   const location = useLocation();
+  const token = location.state.token;
   const navigate = useNavigate();
 
   useEffect(() => {
     fetch(`${getHost()}exercises-metadata`, {
-      headers: { Authorization: `${location.state.token}` },
+      headers: { Authorization: `${token}` },
     })
       .then((response) => response.json())
       .then((data) => {
-        setExerciseMetadata(data);
+        const indexedData = data.map((item, i) => ({ ...item, index: i }));
+        setExerciseMetadata(indexedData);
+        setFilteredExerciseMetadata(indexedData);
       });
-  }, []);
+  }, [token]);
+
+  useEffect(
+    () => setFilteredExerciseMetadata(exerciseMetadata),
+    [exerciseMetadata]
+  );
+
+  useEffect(() => {
+    if (showPublished && !showNotPublished) {
+      setFilteredExerciseMetadata(
+        exerciseMetadata.filter((item) => !item.isDraft)
+      );
+    } else if (!showPublished && showNotPublished) {
+      setFilteredExerciseMetadata(
+        exerciseMetadata.filter((item) => item.isDraft)
+      );
+    } else if (showPublished && showNotPublished) {
+      setFilteredExerciseMetadata(exerciseMetadata);
+    } else {
+      setFilteredExerciseMetadata([]);
+    }
+  }, [showPublished, showNotPublished, exerciseMetadata]);
 
   const handleLogout = () => {
     signOut(auth)
@@ -45,16 +70,16 @@ const Home = () => {
           <CheckMargin
             type="checkbox"
             id="edited"
-            label="Edited"
-            checked={showEdited}
-            onChange={() => setShowEdited(!showEdited)}
+            label="Published"
+            checked={showPublished}
+            onChange={() => setShowPublished(!showPublished)}
           />
           <CheckMargin
             type="checkbox"
             id="not-edited"
-            label="Not Edited"
-            checked={showNotEdited}
-            onChange={() => setShowNotEdited(!showNotEdited)}
+            label="Not Published"
+            checked={showNotPublished}
+            onChange={() => setShowNotPublished(!showNotPublished)}
           />
         </div>
       </DivOppositeEnds>
@@ -64,33 +89,37 @@ const Home = () => {
             <th>#</th>
             <th>Source</th>
             <th>Exercise Type</th>
+            <th>Published</th>
             <th>Last Edited By</th>
             <th>Last Edited At</th>
             <th>Created At</th>
           </tr>
         </thead>
         <tbody>
-          {exerciseMetadata.map((item, i) => {
+          {filteredExerciseMetadata.map((item) => {
             const {
+              index,
               id,
               source,
               exerciseTypeId,
               createdAt = "1970-01-00T00:00[UTC]",
               lastEditedAt = "1970-01-00T00:00[UTC]",
               lastEditedBy,
+              isDraft,
             } = item;
             return (
               <tr key={id}>
-                <td>{i + 1}</td>
+                <td>{index + 1}</td>
                 <td>{source}</td>
                 <td>{exerciseTypeId === 0 ? "短文填空" : "选词填空"}</td>
+                <td>{(!isDraft).toString()}</td>
                 <td>
                   <DivOppositeEnds>
                     {lastEditedBy}
                     <Button
                       onClick={() =>
                         navigate(`/exercise/${id}`, {
-                          state: { token: location.state.token },
+                          state: { token },
                         })
                       }
                       style={{ marginLeft: "5px" }}
@@ -99,12 +128,8 @@ const Home = () => {
                     </Button>
                   </DivOppositeEnds>
                 </td>
-                <td>
-                  {new Date(lastEditedAt).toLocaleString()}
-                </td>
-                <td>
-                  {new Date(createdAt).toLocaleString()}
-                </td>
+                <td>{new Date(lastEditedAt).toLocaleString()}</td>
+                <td>{new Date(createdAt).toLocaleString()}</td>
               </tr>
             );
           })}

@@ -13,6 +13,9 @@ import "./App.css";
 import Exercise from "./components/Exercise";
 
 function RequireAuth({ children }) {
+  // try using localStorage here.
+
+
   if (auth.currentUser) {
     return children;
   }
