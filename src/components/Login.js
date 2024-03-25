@@ -65,6 +65,7 @@ const Login = () => {
             id="password"
             name="password"
             type="password"
+            autoComplete="on"
             required
             placeholder="Password"
             onChange={(e) => setPassword(e.target.value)}
