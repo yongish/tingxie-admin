@@ -7,7 +7,6 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Table from "react-bootstrap/Table";
 import { getHost } from "./utils/env";
-import { parseZonedDateTime } from "@internationalized/date";
 
 const Home = () => {
   const [exerciseMetadata, setExerciseMetadata] = useState([]);
@@ -101,10 +100,10 @@ const Home = () => {
                   </DivOppositeEnds>
                 </td>
                 <td>
-                  {parseZonedDateTime(lastEditedAt).toDate().toLocaleString()}
+                  {new Date(lastEditedAt).toLocaleString()}
                 </td>
                 <td>
-                  {parseZonedDateTime(createdAt).toDate().toLocaleString()}
+                  {new Date(createdAt).toLocaleString()}
                 </td>
               </tr>
             );
