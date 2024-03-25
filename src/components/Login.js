@@ -17,12 +17,9 @@ const Login = () => {
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-
         user
           .getIdToken(true)
           .then((token) => {
-            console.log("token", token);
-
             fetch(`${getHost()}tokens`, {
               method: "PUT",
               headers: {

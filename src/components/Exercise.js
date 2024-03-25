@@ -54,11 +54,7 @@ const Exercise = () => {
 
   const putExercise = () => {
     var local = new Date();
-    var offset = local.getTimezoneOffset() / 60;
-    var lastEditedAt =
-      local.toISOString().replace("Z", offset < 0 ? "+" : "-") +
-      Math.abs(offset).toString().padStart(2, "0") +
-      ":00";
+    var lastEditedAt = local.toISOString();
 
     fetch(`${getHost()}exercise-data`, {
       method: "PUT",
