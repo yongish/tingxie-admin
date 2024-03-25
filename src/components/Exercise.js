@@ -11,10 +11,7 @@ import styled from "styled-components";
 import { auth } from "./firebase";
 import { getHost } from "./utils/env";
 
-pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-  "pdfjs-dist/build/pdf.worker.min.js",
-  import.meta.url
-).toString();
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 const Exercise = () => {
   const { id } = useParams();
