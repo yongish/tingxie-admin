@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Button from "react-bootstrap/Button";
@@ -68,7 +68,7 @@ const Exercise = () => {
         ...exerciseData,
         lastEditedBy: auth.currentUser.email,
         lastEditedAt,
-        isDraft
+        isDraft,
       }),
     })
       .then(() => navigate("/", { state: { token } }))
@@ -148,6 +148,10 @@ const Exercise = () => {
           </div>
           <div>
             <TextareaAutosize
+              autoFocus
+              onFocus={(e) => {
+                setTimeout(() => e.target.selectionEnd = 0, 0);
+              }}
               value={rawString}
               onChange={(e) =>
                 setExerciseData({ ...exerciseData, rawString: e.target.value })
@@ -172,7 +176,7 @@ const Exercise = () => {
                   onClick={() => {
                     putExercise(true);
                   }}
-                  style={{ marginLeft: '5px' }}
+                  style={{ marginLeft: "5px" }}
                 >
                   Save as Draft
                 </Button>

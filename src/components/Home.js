@@ -111,7 +111,7 @@ const Home = () => {
               <tr key={id}>
                 <td>{index + 1}</td>
                 <td>{source}</td>
-                <td>{exerciseTypeId === 0 ? "短文填空" : "选词填空"}</td>
+                <td>{exerciseTypeId === 0 ? "短文填空" : "语文应用"}</td>
                 <td>{(!isDraft).toString()}</td>
                 <td>
                   <DivOppositeEnds>
