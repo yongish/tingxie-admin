@@ -10,7 +10,7 @@ import styled from "styled-components";
 
 import { auth } from "./firebase";
 import { getHost } from "./utils/env";
-import { Spinner } from "react-bootstrap";
+import { Alert, Form, Spinner } from "react-bootstrap";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
@@ -22,9 +22,16 @@ const Exercise = () => {
 
   const [exerciseData, setExerciseData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const { sourceUrl, rawString, questionPageNumber, answerPageNumber } =
-    exerciseData;
   const [activeKey, setActiveKey] = useState("questionPageNumber");
+  const [showDangerAlert, setShowDangerAlert] = useState(false);
+
+  const {
+    sourceUrl,
+    rawString,
+    questionPageNumber,
+    answerPageNumber,
+    invalid,
+  } = exerciseData;
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -71,9 +78,31 @@ const Exercise = () => {
         isDraft,
       }),
     })
-      .then(() => navigate("/", { state: { token } }))
+      .then((response) => {
+        if (response.status === 200) {
+          navigate("/", { state: { token } });
+        } else {
+          putInvalid(true);
+          setShowDangerAlert(true);
+        }
+      })
       .catch((error) => console.error(error))
       .finally(() => setIsLoading(false));
+  };
+
+  const putInvalid = async (invalid) => {
+    const response = await fetch(
+      `${getHost()}exercise-data/${id}/invalid/${invalid}`,
+      {
+        method: "PUT",
+      }
+    );
+    console.log(response)
+    if (response.status === 200) {
+      setExerciseData({ ...exerciseData, invalid });
+    } else {
+      setShowDangerAlert(true);
+    }
   };
 
   if (isLoading) {
@@ -122,29 +151,50 @@ const Exercise = () => {
           </Document>
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
-          <div>
-            <BtnMargin
-              onClick={() => {
-                setExerciseData((prevData) => ({
-                  ...prevData,
-                  [activeKey]: prevData[activeKey] - 1,
-                }));
-              }}
-            >
-              上一页
-            </BtnMargin>
-            <BtnMargin
-              onClick={() =>
-                setExerciseData((prevData) => {
-                  return {
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <div>
+              <BtnMargin
+                onClick={() => {
+                  setExerciseData((prevData) => ({
                     ...prevData,
-                    [activeKey]: prevData[activeKey] + 1,
-                  };
-                })
-              }
-            >
-              下一页
-            </BtnMargin>
+                    [activeKey]: prevData[activeKey] - 1,
+                  }));
+                }}
+              >
+                上一页
+              </BtnMargin>
+              <BtnMargin
+                onClick={() =>
+                  setExerciseData((prevData) => {
+                    return {
+                      ...prevData,
+                      [activeKey]: prevData[activeKey] + 1,
+                    };
+                  })
+                }
+              >
+                下一页
+              </BtnMargin>
+            </div>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              {showDangerAlert && (
+                <Alert variant="danger" style={{ marginRight: 10 }}>
+                  错误。 联络志勇。此练习已被标记为有问题。
+                </Alert>
+              )}
+              <Form.Check
+                type="checkbox"
+                label="有问题"
+                checked={invalid}
+                onChange={(e) => putInvalid(e.target.checked)}
+              />
+            </div>
           </div>
           <div>
             <TextareaAutosize
