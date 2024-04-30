@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Button from "react-bootstrap/Button";
@@ -50,7 +50,7 @@ const Exercise = () => {
       .then((data) => {
         setExerciseData(data);
       });
-  }, [id]);
+  }, [id, token]);
 
   const putExercise = (isDraft) => {
     setIsLoading(true);
@@ -100,7 +100,7 @@ const Exercise = () => {
               className="mb-3"
               onSelect={(key) => setActiveKey(key)}
             >
-              <Tab eventKey="questionPageNumber" title="Question Page">
+              <Tab eventKey="questionPageNumber" title="问题页">
                 <div>
                   <Page
                     pageNumber={questionPageNumber}
@@ -109,7 +109,7 @@ const Exercise = () => {
                   />
                 </div>
               </Tab>
-              <Tab eventKey="answerPageNumber" title="Answer Page">
+              <Tab eventKey="answerPageNumber" title="答案页">
                 <div>
                   <Page
                     pageNumber={answerPageNumber}
@@ -131,7 +131,7 @@ const Exercise = () => {
                 }));
               }}
             >
-              Previous Page
+              上一页
             </BtnMargin>
             <BtnMargin
               onClick={() =>
@@ -143,14 +143,14 @@ const Exercise = () => {
                 })
               }
             >
-              Next Page
+              下一页
             </BtnMargin>
           </div>
           <div>
             <TextareaAutosize
               autoFocus
               onFocus={(e) => {
-                setTimeout(() => e.target.selectionEnd = 0, 0);
+                setTimeout(() => (e.target.selectionEnd = 0), 0);
               }}
               value={rawString}
               onChange={(e) =>
@@ -170,7 +170,7 @@ const Exercise = () => {
                   onClick={() => navigate("/", { state: { token } })}
                   variant="secondary"
                 >
-                  Cancel (Go Back)
+                  取消（返回首页）
                 </Button>
                 <Button
                   onClick={() => {
@@ -178,7 +178,7 @@ const Exercise = () => {
                   }}
                   style={{ marginLeft: "5px" }}
                 >
-                  Save as Draft
+                  保存草稿
                 </Button>
               </div>
               <Button
@@ -186,7 +186,7 @@ const Exercise = () => {
                   putExercise(false);
                 }}
               >
-                Save as Publish
+                发布
               </Button>
             </div>
           </div>
