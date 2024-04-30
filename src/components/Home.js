@@ -109,11 +109,19 @@ const Home = () => {
               isDraft,
               invalid,
             } = item;
-            console.log(item)
             return (
               <tr key={id}>
                 <td>{index + 1}</td>
-                <td style={{ display: "flex", alignItems: 'baseline' }}>{source}{invalid && <Alert variant="danger" style={{ marginLeft: 5 }}>有错误</Alert>}</td>
+                <td
+                  style={invalid && { display: "flex", alignItems: "baseline" }}
+                >
+                  {source}
+                  {invalid && (
+                    <Alert variant="danger" style={{ marginLeft: 5 }}>
+                      有错误
+                    </Alert>
+                  )}
+                </td>
                 <td>{exerciseTypeId === 0 ? "短文填空" : "语文应用"}</td>
                 <td>{(!isDraft).toString()}</td>
                 <td>

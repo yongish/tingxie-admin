@@ -97,7 +97,6 @@ const Exercise = () => {
         method: "PUT",
       }
     );
-    console.log(response)
     if (response.status === 200) {
       setExerciseData({ ...exerciseData, invalid });
     } else {
