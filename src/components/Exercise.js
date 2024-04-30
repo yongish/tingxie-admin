@@ -185,12 +185,12 @@ const Exercise = () => {
             <div style={{ display: "flex", alignItems: "center" }}>
               {showDangerAlert && (
                 <Alert variant="danger" style={{ marginRight: 10 }}>
-                  错误。 联络志勇。此练习已被标记为有问题。
+                  错误。 联络志勇。此练习已被标记为有错误。
                 </Alert>
               )}
               <Form.Check
                 type="checkbox"
-                label="有问题"
+                label="有错误"
                 checked={invalid}
                 onChange={(e) => putInvalid(e.target.checked)}
               />

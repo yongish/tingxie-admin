@@ -3,6 +3,7 @@ import { signOut } from "firebase/auth";
 import { auth } from "./firebase";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Table from "react-bootstrap/Table";
@@ -106,11 +107,13 @@ const Home = () => {
               lastEditedAt = "1970-01-00T00:00[UTC]",
               lastEditedBy,
               isDraft,
+              invalid,
             } = item;
+            console.log(item)
             return (
               <tr key={id}>
                 <td>{index + 1}</td>
-                <td>{source}</td>
+                <td style={{ display: "flex", alignItems: 'baseline' }}>{source}{invalid && <Alert variant="danger" style={{ marginLeft: 5 }}>有错误</Alert>}</td>
                 <td>{exerciseTypeId === 0 ? "短文填空" : "语文应用"}</td>
                 <td>{(!isDraft).toString()}</td>
                 <td>
