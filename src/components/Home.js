@@ -113,7 +113,7 @@ const Home = () => {
               <tr key={id}>
                 <td>{index + 1}</td>
                 <td
-                  style={invalid && { display: "flex", alignItems: "baseline" }}
+                  style={invalid ? { display: "flex", alignItems: "baseline" } : {}}
                 >
                   {source}
                   {invalid && (
