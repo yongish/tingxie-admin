@@ -10,7 +10,7 @@ import {
 import { auth } from "./components/firebase";
 
 import "./App.css";
-import Exercise from "./components/Exercise";
+import Exercise from "./components/exercise/Exercise";
 
 function RequireAuth({ children }) {
   // try using localStorage here.
