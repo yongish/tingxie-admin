@@ -15,8 +15,33 @@ const Home = () => {
   const [showPublished, setShowPublished] = useState(true);
   const [showNotPublished, setShowNotPublished] = useState(true);
 
+  const [token, setToken] = useState(null);
   const location = useLocation();
-  const token = location.state.token;
+  useEffect(() => {
+    const t = location.state?.token;
+    if (t) {
+      setToken(t);
+    } else {
+      const user = auth.currentUser;
+      user
+        .getIdToken(true)
+        .then((token) => {
+          setToken(token);
+          fetch(`${getHost()}tokens`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email: user.email,
+              token,
+            }),
+          });
+        })
+        .catch((error) => console.error(error));
+    }
+  }, [location.state?.token]);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -110,12 +135,34 @@ const Home = () => {
               invalid,
             } = item;
             return (
-              <tr key={id}>
+              <tr key={index}>
                 <td>{index + 1}</td>
                 <td
-                  style={invalid ? { display: "flex", alignItems: "baseline" } : {}}
+                  style={
+                    invalid ? { display: "flex", alignItems: "baseline" } : {}
+                  }
                 >
                   {source}
+                  {invalid && (
+                    <Alert variant="danger" style={{ marginLeft: 5 }}>
+                      有错误
+                    </Alert>
+                  )}
+                  {invalid && (
+                    <Alert variant="danger" style={{ marginLeft: 5 }}>
+                      有错误
+                    </Alert>
+                  )}
+                  {invalid && (
+                    <Alert variant="danger" style={{ marginLeft: 5 }}>
+                      有错误
+                    </Alert>
+                  )}
+                  {invalid && (
+                    <Alert variant="danger" style={{ marginLeft: 5 }}>
+                      有错误
+                    </Alert>
+                  )}
                   {invalid && (
                     <Alert variant="danger" style={{ marginLeft: 5 }}>
                       有错误

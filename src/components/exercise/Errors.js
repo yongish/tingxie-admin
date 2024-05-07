@@ -13,7 +13,7 @@ function usePrevious(value) {
   return ref.current;
 }
 
-const Errors = (id) => {
+const Errors = ({ id }) => {
   const [errors, setErrors] = useState([]);
 
   const options = [
@@ -26,13 +26,13 @@ const Errors = (id) => {
   ];
   const prevErrors = usePrevious(errors);
   useEffect(() => {
-    if (prevErrors.length > errors.length) {
+    if (prevErrors?.length > errors.length) {
       getOptionDiff(prevErrors, errors).forEach((errorId) =>
         fetch(`${getHost()}exercise-data/${id}/error/${errorId}`, {
           method: "DELETE",
         })
       );
-    } else if (errors.length > prevErrors.length) {
+    } else if (errors.length > prevErrors?.length) {
       getOptionDiff(errors, prevErrors).forEach((errorId) =>
         fetch(`${getHost()}exercise-data/${id}/error/${errorId}`, {
           method: "PUT",
