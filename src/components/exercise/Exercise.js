@@ -240,7 +240,7 @@ const Exercise = () => {
                 发布
               </Button>
             </div>
-            <Errors id={id} />
+            {/* <Errors id={id} /> */}
           </div>
         </div>
       </div>

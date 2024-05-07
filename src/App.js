@@ -5,21 +5,31 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Navigate,
 } from "react-router-dom";
-import { auth } from "./components/firebase";
 
 import "./App.css";
 import Exercise from "./components/exercise/Exercise";
+import { useAuth } from "./useAuth";
 
 function RequireAuth({ children }) {
+  const { pending, isSignedIn, user, auth } = useAuth()
+
   // try using localStorage here.
-
-
-  if (auth.currentUser) {
-    return children;
+  console.log(auth)
+  if (pending) {
+    return <h1>waiting...</h1>
   }
-  return <Navigate to="/login" />;
+  if (!isSignedIn) {
+    return <Login />;
+  }
+  return children;
+
+  // if (auth.currentUser) {
+  //   console.log('aaaaaaaaaa')
+  //   return children;
+  // }
+  // console.log('bbbbbbbbbb')
+  // return <Navigate to="/login" />;
 }
 
 function App() {
