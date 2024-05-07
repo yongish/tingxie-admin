@@ -148,26 +148,6 @@ const Home = () => {
                       有错误
                     </Alert>
                   )}
-                  {invalid && (
-                    <Alert variant="danger" style={{ marginLeft: 5 }}>
-                      有错误
-                    </Alert>
-                  )}
-                  {invalid && (
-                    <Alert variant="danger" style={{ marginLeft: 5 }}>
-                      有错误
-                    </Alert>
-                  )}
-                  {invalid && (
-                    <Alert variant="danger" style={{ marginLeft: 5 }}>
-                      有错误
-                    </Alert>
-                  )}
-                  {invalid && (
-                    <Alert variant="danger" style={{ marginLeft: 5 }}>
-                      有错误
-                    </Alert>
-                  )}
                 </td>
                 <td>{exerciseTypeId === 0 ? "短文填空" : "语文应用"}</td>
                 <td>{(!isDraft).toString()}</td>
