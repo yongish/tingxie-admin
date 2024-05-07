@@ -1,23 +1,24 @@
 import React from "react";
 import Home from "./components/Home";
 import Login from "./components/Login";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import "./App.css";
 import Exercise from "./components/exercise/Exercise";
 import { useAuth } from "./useAuth";
 
 function RequireAuth({ children }) {
-  const { pending, isSignedIn, user, auth } = useAuth()
+  const {
+    pending,
+    isSignedIn,
+    auth,
+    // user
+  } = useAuth();
 
   // try using localStorage here.
-  console.log(auth)
+  console.log(auth);
   if (pending) {
-    return <h1>waiting...</h1>
+    return <h1>waiting...</h1>;
   }
   if (!isSignedIn) {
     return <Login />;
