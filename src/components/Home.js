@@ -8,12 +8,14 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Table from "react-bootstrap/Table";
 import { getHost } from "./utils/env";
+import { options } from "./exercise/errorValues";
 
 const Home = () => {
   const [exerciseMetadata, setExerciseMetadata] = useState([]);
   const [filteredExerciseMetadata, setFilteredExerciseMetadata] = useState([]);
   const [showPublished, setShowPublished] = useState(true);
   const [showNotPublished, setShowNotPublished] = useState(true);
+  const [errors, setErrors] = useState([]);
 
   const [token, setToken] = useState(null);
   const location = useLocation();
@@ -132,22 +134,47 @@ const Home = () => {
               lastEditedAt = "1970-01-00T00:00[UTC]",
               lastEditedBy,
               isDraft,
-              invalid,
+              errorIds,
             } = item;
             return (
               <tr key={index}>
                 <td>{index + 1}</td>
-                <td
-                  style={
-                    invalid ? { display: "flex", alignItems: "baseline" } : {}
-                  }
-                >
+                <td>
                   {source}
-                  {invalid && (
-                    <Alert variant="danger" style={{ marginLeft: 5 }}>
+                  {/* put errors here */}
+                  {/* // stopped here */}
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                    {options
+                      .filter((o) => errorIds?.includes(o.value))
+                      .map((o) => (
+                        <Alert
+                          variant="danger"
+                          style={{
+                            width: "fit-content",
+                            padding: "inherit",
+                            margin: "unset",
+                            marginRight: 5,
+                          }}
+                        >
+                          {o.label}
+                        </Alert>
+                      ))}
+                  </div>
+
+                  {/* {invalid && (
+                    <Alert
+                      variant="danger"
+                      style={{ width: "fit-content", padding: "inherit" }}
+                    >
                       有错误
                     </Alert>
-                  )}
+                  )} */}
                 </td>
                 <td>{exerciseTypeId === 0 ? "短文填空" : "语文应用"}</td>
                 <td>{(!isDraft).toString()}</td>

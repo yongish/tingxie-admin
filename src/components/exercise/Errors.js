@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Select from "react-select";
 import { getHost } from "../utils/env";
+import { options } from "./errorValues";
 
 const getOptionDiff = (a, b) =>
   a.map((e) => e.value).filter((v) => !b.map((e) => e.value).includes(v));
@@ -16,14 +17,6 @@ function usePrevious(value) {
 const Errors = ({ id }) => {
   const [errors, setErrors] = useState([]);
 
-  const options = [
-    { value: 0, label: "无法保存或发布" },
-    { value: 1, label: "可能重复" },
-    { value: 2, label: "文本不完整" },
-    { value: 3, label: "文本错误" },
-    { value: 4, label: "答案错" },
-    { value: 5, label: "其他错误" },
-  ];
   const prevErrors = usePrevious(errors);
   useEffect(() => {
     if (prevErrors?.length > errors.length) {
