@@ -15,8 +15,6 @@ function RequireAuth({ children }) {
     // user
   } = useAuth();
 
-  // try using localStorage here.
-  console.log(auth);
   if (pending) {
     return <h1>waiting...</h1>;
   }
@@ -24,13 +22,6 @@ function RequireAuth({ children }) {
     return <Login />;
   }
   return children;
-
-  // if (auth.currentUser) {
-  //   console.log('aaaaaaaaaa')
-  //   return children;
-  // }
-  // console.log('bbbbbbbbbb')
-  // return <Navigate to="/login" />;
 }
 
 function App() {

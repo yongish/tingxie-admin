@@ -253,7 +253,7 @@ const Exercise = () => {
                 发布
               </Button>
             </div>
-            {/* <Errors id={id} /> */}
+            <Errors id={id} />
             {query !== "" && (
               <div style={{ margin: 5 }}>
                 <SearchResult query={query} token={token} />
