@@ -128,19 +128,13 @@ const Exercise = () => {
     );
   }
 
-  console.log('id', id)
-  console.log('exerciseIds', exerciseIds)
   const currExerciseIndex = exerciseIds.indexOf(parseInt(id));
-  console.log('currExerciseIndex', currExerciseIndex)
   const prevExerciseId =
     currExerciseIndex === 0 ? -1 : exerciseIds[currExerciseIndex - 1];
   const nextExerciseId =
     currExerciseIndex === exerciseIds.length - 1
       ? -1
       : exerciseIds[currExerciseIndex + 1];
-
-  console.log("prevExerciseId", prevExerciseId);
-  console.log("nextExerciseId", nextExerciseId);
 
   return (
     <DivMargin>
