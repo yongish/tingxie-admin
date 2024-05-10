@@ -15,7 +15,6 @@ const Home = () => {
   const [filteredExerciseMetadata, setFilteredExerciseMetadata] = useState([]);
   const [showPublished, setShowPublished] = useState(true);
   const [showNotPublished, setShowNotPublished] = useState(true);
-  const [errors, setErrors] = useState([]);
 
   const [token, setToken] = useState(null);
   const location = useLocation();

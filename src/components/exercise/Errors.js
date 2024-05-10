@@ -17,27 +17,34 @@ function usePrevious(value) {
 const Errors = ({ id }) => {
   const [errors, setErrors] = useState([]);
 
-  const prevErrors = usePrevious(errors);
+  // const prevErrors = usePrevious(errors);
+  // useEffect(() => {
+  //   if (prevErrors?.length > errors.length) {
+  //     getOptionDiff(prevErrors, errors).forEach((errorId) =>
+  //       fetch(`${getHost()}exercise-data/${id}/error/${errorId}`, {
+  //         method: "DELETE",
+  //       })
+  //     );
+  //   } else if (errors.length > prevErrors?.length) {
+  //     getOptionDiff(errors, prevErrors).forEach((errorId) =>
+  //       fetch(`${getHost()}exercise-data/${id}/error/${errorId}`, {
+  //         method: "PUT",
+  //       })
+  //     );
+  //   }
+  // }, [errors, id, prevErrors]);
+
+  // useEffect(() => {
+  //   fetch(`${getHost()}exercise-data/${id}/error`).then((response) => {
+  //     const data = response.json();
+  //     // setErrors(data);
+  //   });
+  // });
   useEffect(() => {
-    if (prevErrors?.length > errors.length) {
-      getOptionDiff(prevErrors, errors).forEach((errorId) =>
-        fetch(`${getHost()}exercise-data/${id}/error/${errorId}`, {
-          method: "DELETE",
-        })
-      );
-    } else if (errors.length > prevErrors?.length) {
-      getOptionDiff(errors, prevErrors).forEach((errorId) =>
-        fetch(`${getHost()}exercise-data/${id}/error/${errorId}`, {
-          method: "PUT",
-        })
-      );
-    } else {
-      fetch(`${getHost()}exercise-data/${id}/error`).then((response) => {
-        const data = response.json();
-        setErrors(data);
-      });
-    }
-  }, [errors, id, prevErrors]);
+    fetch(`${getHost()}exercise-data/${id}/error`)
+      .then((response) => response.json())
+      // .then((data) => setErrors(data));
+  });
 
   return (
     <div>

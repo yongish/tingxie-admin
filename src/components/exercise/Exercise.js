@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Button from "react-bootstrap/Button";
@@ -10,7 +10,8 @@ import styled from "styled-components";
 import Errors from "./Errors";
 import { auth } from "../firebase";
 import { getHost } from "../utils/env";
-import { Alert, Form, Spinner } from "react-bootstrap";
+import { Alert, Spinner } from "react-bootstrap";
+import SearchResult from "./SearchResult";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
@@ -24,13 +25,16 @@ const Exercise = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [activeKey, setActiveKey] = useState("questionPageNumber");
   const [showDangerAlert, setShowDangerAlert] = useState(false);
+  const [query, setQuery] = useState("");
+
+  const myRef = useRef(null);
 
   const {
     sourceUrl,
     rawString,
     questionPageNumber,
     answerPageNumber,
-    invalid,
+    // invalid,
   } = exerciseData;
 
   useEffect(() => {
@@ -188,12 +192,12 @@ const Exercise = () => {
                   错误。 联络志勇。此练习已被标记为有错误。
                 </Alert>
               )}
-              <Form.Check
+              {/* <Form.Check
                 type="checkbox"
                 label="有错误"
                 checked={invalid}
                 onChange={(e) => putInvalid(e.target.checked)}
-              />
+              /> */}
             </div>
           </div>
           <div>
@@ -207,6 +211,15 @@ const Exercise = () => {
                 setExerciseData({ ...exerciseData, rawString: e.target.value })
               }
               cols={80}
+              ref={myRef}
+              onMouseUp={() =>
+                setQuery(
+                  myRef.current.value.substring(
+                    myRef.current.selectionStart,
+                    myRef.current.selectionEnd
+                  )
+                )
+              }
             />
             <div
               style={{
@@ -240,7 +253,12 @@ const Exercise = () => {
                 发布
               </Button>
             </div>
-            <Errors id={id} />
+            {/* <Errors id={id} /> */}
+            {query !== "" && (
+              <div style={{ margin: 5 }}>
+                <SearchResult query={query} token={token} />
+              </div>
+            )}
           </div>
         </div>
       </div>
