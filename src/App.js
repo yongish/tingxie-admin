@@ -11,7 +11,7 @@ function RequireAuth({ children }) {
   const {
     pending,
     isSignedIn,
-    auth,
+    // auth,
     // user
   } = useAuth();
 
