@@ -54,8 +54,6 @@ const Exercise = () => {
   }, [navigate]);
 
   useEffect(() => {
-    // Load original page here.
-    // todo: get exercise string
     fetch(`${getHost()}exercise-data/${id}`, {
       headers: { Authorization: `${token}` },
     })
@@ -164,32 +162,21 @@ const Exercise = () => {
           >
             <div>
               <BtnMargin
-                onClick={() => {
+                onClick={() =>
                   putExercise({
                     ...exerciseData,
                     [activeKey]: exerciseData[activeKey] - 1,
-                  });
-                  // setExerciseData((prevData) => ({
-                  //   ...prevData,
-                  //   [activeKey]: prevData[activeKey] - 1,
-                  // }));
-                }}
+                  })
+                }
               >
                 上一页
               </BtnMargin>
               <BtnMargin
-                onClick={
-                  () =>
-                    putExercise({
-                      ...exerciseData,
-                      [activeKey]: exerciseData[activeKey] + 1,
-                    })
-                  // setExerciseData((prevData) => {
-                  //   return {
-                  //     ...prevData,
-                  //     [activeKey]: prevData[activeKey] + 1,
-                  //   };
-                  // })
+                onClick={() =>
+                  putExercise({
+                    ...exerciseData,
+                    [activeKey]: exerciseData[activeKey] + 1,
+                  })
                 }
               >
                 下一页
@@ -248,7 +235,6 @@ const Exercise = () => {
                 exerciseTypeId: parseInt(e.target.value),
               };
               putExercise(newExerciseData);
-              // setExerciseData(newExerciseData);
             }}
             value={exerciseData.exerciseTypeId}
           >
@@ -262,10 +248,8 @@ const Exercise = () => {
                 setTimeout(() => (e.target.selectionEnd = 0), 0);
               }}
               value={rawString}
-              onChange={
-                (e) =>
-                  putExercise({ ...exerciseData, rawString: e.target.value })
-                // setExerciseData({ ...exerciseData, rawString: e.target.value })
+              onChange={(e) =>
+                putExercise({ ...exerciseData, rawString: e.target.value })
               }
               cols={80}
               ref={myRef}
@@ -294,9 +278,8 @@ const Exercise = () => {
                   取消（返回首页）
                 </Button>
                 <Button
-                  onClick={
-                    () => putExercise({ ...exerciseData, isDraft: true })
-                    // setExerciseData({ ...exerciseData, isDraft: true })
+                  onClick={() =>
+                    putExercise({ ...exerciseData, isDraft: true })
                   }
                   style={{ marginLeft: "5px" }}
                 >
@@ -304,10 +287,7 @@ const Exercise = () => {
                 </Button>
               </div>
               <Button
-                onClick={
-                  () => putExercise({ ...exerciseData, isDraft: false })
-                  // setExerciseData({ ...exerciseData, isDraft: false })
-                }
+                onClick={() => putExercise({ ...exerciseData, isDraft: false })}
               >
                 发布
               </Button>
