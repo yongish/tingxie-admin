@@ -13,8 +13,12 @@ import { options } from "./exercise/errorValues";
 const Home = () => {
   const [exerciseMetadata, setExerciseMetadata] = useState([]);
   const [filteredExerciseMetadata, setFilteredExerciseMetadata] = useState([]);
-  const [showPublished, setShowPublished] = useState(true);
-  const [showNotPublished, setShowNotPublished] = useState(true);
+  const [showPublished, setShowPublished] = useState(
+    localStorage.getItem("showPublished") === 'true'
+  );
+  const [showNotPublished, setShowNotPublished] = useState(
+    localStorage.getItem("showNotPublished") === 'true'
+  );
 
   const [token, setToken] = useState(null);
   const location = useLocation();
@@ -99,14 +103,22 @@ const Home = () => {
             id="edited"
             label="Published"
             checked={showPublished}
-            onChange={() => setShowPublished(!showPublished)}
+            onChange={() => {
+              const newValue = !showPublished;
+              setShowPublished(newValue);
+              localStorage.setItem("showPublished", newValue.toString());
+            }}
           />
           <CheckMargin
             type="checkbox"
             id="not-edited"
             label="Not Published"
             checked={showNotPublished}
-            onChange={() => setShowNotPublished(!showNotPublished)}
+            onChange={() => {
+              const newValue = !showNotPublished;
+              setShowNotPublished(newValue);
+              localStorage.setItem("showNotPublished", newValue.toString());
+            }}
           />
         </div>
       </DivOppositeEnds>
