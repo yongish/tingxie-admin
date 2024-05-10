@@ -19,6 +19,7 @@ const Exercise = () => {
   const { id } = useParams();
   const location = useLocation();
   const token = location.state.token;
+  const exerciseIds = location.state.exerciseIds;
   const navigate = useNavigate();
 
   const [exerciseData, setExerciseData] = useState({});
@@ -83,12 +84,16 @@ const Exercise = () => {
       }),
     })
       .then((response) => {
-        if (response.status === 200) {
-          navigate("/", { state: { token } });
-        } else {
+        if (response.status !== 200) {
           putInvalid(true);
           setShowDangerAlert(true);
         }
+        // if (response.status === 200) {
+        //   navigate("/", { state: { token } });
+        // } else {
+        //   putInvalid(true);
+        //   setShowDangerAlert(true);
+        // }
       })
       .catch((error) => console.error(error))
       .finally(() => setIsLoading(false));
@@ -122,6 +127,20 @@ const Exercise = () => {
       </div>
     );
   }
+
+  console.log('id', id)
+  console.log('exerciseIds', exerciseIds)
+  const currExerciseIndex = exerciseIds.indexOf(parseInt(id));
+  console.log('currExerciseIndex', currExerciseIndex)
+  const prevExerciseId =
+    currExerciseIndex === 0 ? -1 : exerciseIds[currExerciseIndex - 1];
+  const nextExerciseId =
+    currExerciseIndex === exerciseIds.length - 1
+      ? -1
+      : exerciseIds[currExerciseIndex + 1];
+
+  console.log("prevExerciseId", prevExerciseId);
+  console.log("nextExerciseId", nextExerciseId);
 
   return (
     <DivMargin>
@@ -198,6 +217,30 @@ const Exercise = () => {
                 checked={invalid}
                 onChange={(e) => putInvalid(e.target.checked)}
               /> */}
+              <div>
+                {prevExerciseId !== -1 && (
+                  <BtnMargin
+                    onClick={() =>
+                      navigate(`/exercise/${prevExerciseId}`, {
+                        state: { token, exerciseIds },
+                      })
+                    }
+                  >
+                    上一个练习
+                  </BtnMargin>
+                )}
+                {nextExerciseId !== -1 && (
+                  <BtnMargin
+                    onClick={() =>
+                      navigate(`/exercise/${nextExerciseId}`, {
+                        state: { token, exerciseIds },
+                      })
+                    }
+                  >
+                    下一个练习
+                  </BtnMargin>
+                )}
+              </div>
             </div>
           </div>
           <div>

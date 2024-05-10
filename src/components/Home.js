@@ -12,12 +12,13 @@ import { options } from "./exercise/errorValues";
 
 const Home = () => {
   const [exerciseMetadata, setExerciseMetadata] = useState([]);
+  const [exerciseIds, setExerciseIds] = useState([]);
   const [filteredExerciseMetadata, setFilteredExerciseMetadata] = useState([]);
   const [showPublished, setShowPublished] = useState(
-    localStorage.getItem("showPublished") === 'true'
+    localStorage.getItem("showPublished") === "true"
   );
   const [showNotPublished, setShowNotPublished] = useState(
-    localStorage.getItem("showNotPublished") === 'true'
+    localStorage.getItem("showNotPublished") === "true"
   );
 
   const [token, setToken] = useState(null);
@@ -57,6 +58,7 @@ const Home = () => {
       .then((data) => {
         const indexedData = data.map((item, i) => ({ ...item, index: i }));
         setExerciseMetadata(indexedData);
+        setExerciseIds(indexedData.map((item) => item.id));
         setFilteredExerciseMetadata(indexedData);
       });
   }, [token]);
@@ -195,7 +197,7 @@ const Home = () => {
                     <Button
                       onClick={() =>
                         navigate(`/exercise/${id}`, {
-                          state: { token },
+                          state: { token, exerciseIds },
                         })
                       }
                       style={{ marginLeft: "5px" }}
