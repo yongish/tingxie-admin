@@ -10,7 +10,7 @@ import styled from "styled-components";
 import Errors from "./Errors";
 import { auth } from "../firebase";
 import { getHost } from "../utils/env";
-import { Alert, Spinner } from "react-bootstrap";
+import { Alert, Form, Spinner } from "react-bootstrap";
 import SearchResult from "./SearchResult";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
@@ -23,9 +23,10 @@ const Exercise = () => {
   const navigate = useNavigate();
 
   const [exerciseData, setExerciseData] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [activeKey, setActiveKey] = useState("questionPageNumber");
   const [showDangerAlert, setShowDangerAlert] = useState(false);
+  const [showSavedAlert, setShowSavedAlert] = useState(false);
   const [query, setQuery] = useState("");
 
   const myRef = useRef(null);
@@ -60,12 +61,15 @@ const Exercise = () => {
     })
       .then((response) => response.json())
       .then((data) => {
+        setIsLoading(false);
         setExerciseData(data);
       });
   }, [id, token]);
 
-  const putExercise = (isDraft) => {
+  const putExercise = (exerciseData) => {
     setIsLoading(true);
+    setShowDangerAlert(false);
+    setShowSavedAlert(false);
 
     var local = new Date();
     var lastEditedAt = local.toISOString();
@@ -80,37 +84,20 @@ const Exercise = () => {
         ...exerciseData,
         lastEditedBy: auth.currentUser.email,
         lastEditedAt,
-        isDraft,
       }),
     })
       .then((response) => {
-        if (response.status !== 200) {
-          putInvalid(true);
+        if (response.status === 200) {
+          setShowDangerAlert(false);
+          setShowSavedAlert(true);
+          setExerciseData(exerciseData);
+        } else {
           setShowDangerAlert(true);
+          setShowSavedAlert(false);
         }
-        // if (response.status === 200) {
-        //   navigate("/", { state: { token } });
-        // } else {
-        //   putInvalid(true);
-        //   setShowDangerAlert(true);
-        // }
       })
       .catch((error) => console.error(error))
       .finally(() => setIsLoading(false));
-  };
-
-  const putInvalid = async (invalid) => {
-    const response = await fetch(
-      `${getHost()}exercise-data/${id}/invalid/${invalid}`,
-      {
-        method: "PUT",
-      }
-    );
-    if (response.status === 200) {
-      setExerciseData({ ...exerciseData, invalid });
-    } else {
-      setShowDangerAlert(true);
-    }
   };
 
   if (isLoading) {
@@ -178,22 +165,31 @@ const Exercise = () => {
             <div>
               <BtnMargin
                 onClick={() => {
-                  setExerciseData((prevData) => ({
-                    ...prevData,
-                    [activeKey]: prevData[activeKey] - 1,
-                  }));
+                  putExercise({
+                    ...exerciseData,
+                    [activeKey]: exerciseData[activeKey] - 1,
+                  });
+                  // setExerciseData((prevData) => ({
+                  //   ...prevData,
+                  //   [activeKey]: prevData[activeKey] - 1,
+                  // }));
                 }}
               >
                 上一页
               </BtnMargin>
               <BtnMargin
-                onClick={() =>
-                  setExerciseData((prevData) => {
-                    return {
-                      ...prevData,
-                      [activeKey]: prevData[activeKey] + 1,
-                    };
-                  })
+                onClick={
+                  () =>
+                    putExercise({
+                      ...exerciseData,
+                      [activeKey]: exerciseData[activeKey] + 1,
+                    })
+                  // setExerciseData((prevData) => {
+                  //   return {
+                  //     ...prevData,
+                  //     [activeKey]: prevData[activeKey] + 1,
+                  //   };
+                  // })
                 }
               >
                 下一页
@@ -203,6 +199,11 @@ const Exercise = () => {
               {showDangerAlert && (
                 <Alert variant="danger" style={{ marginRight: 10 }}>
                   错误。 联络志勇。此练习已被标记为有错误。
+                </Alert>
+              )}
+              {showSavedAlert && (
+                <Alert variant="success" style={{ marginRight: 10 }}>
+                  保存成功
                 </Alert>
               )}
               {/* <Form.Check
@@ -237,6 +238,23 @@ const Exercise = () => {
               </div>
             </div>
           </div>
+          <Form.Select
+            aria-label="Exercise Type"
+            style={{ width: "fit-content", margin: 5 }}
+            onChange={(e) => {
+              const newExerciseData = {
+                ...exerciseData,
+                isDraft: true,
+                exerciseTypeId: parseInt(e.target.value),
+              };
+              putExercise(newExerciseData);
+              // setExerciseData(newExerciseData);
+            }}
+            value={exerciseData.exerciseTypeId}
+          >
+            <option value={0}>短文填空</option>
+            <option value={1}>语文应用</option>
+          </Form.Select>
           <div>
             <TextareaAutosize
               autoFocus
@@ -244,8 +262,10 @@ const Exercise = () => {
                 setTimeout(() => (e.target.selectionEnd = 0), 0);
               }}
               value={rawString}
-              onChange={(e) =>
-                setExerciseData({ ...exerciseData, rawString: e.target.value })
+              onChange={
+                (e) =>
+                  putExercise({ ...exerciseData, rawString: e.target.value })
+                // setExerciseData({ ...exerciseData, rawString: e.target.value })
               }
               cols={80}
               ref={myRef}
@@ -274,18 +294,20 @@ const Exercise = () => {
                   取消（返回首页）
                 </Button>
                 <Button
-                  onClick={() => {
-                    putExercise(true);
-                  }}
+                  onClick={
+                    () => putExercise({ ...exerciseData, isDraft: true })
+                    // setExerciseData({ ...exerciseData, isDraft: true })
+                  }
                   style={{ marginLeft: "5px" }}
                 >
                   保存草稿
                 </Button>
               </div>
               <Button
-                onClick={() => {
-                  putExercise(false);
-                }}
+                onClick={
+                  () => putExercise({ ...exerciseData, isDraft: false })
+                  // setExerciseData({ ...exerciseData, isDraft: false })
+                }
               >
                 发布
               </Button>
