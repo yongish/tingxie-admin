@@ -292,7 +292,11 @@ const Exercise = () => {
                 发布
               </Button>
             </div>
-            <Errors id={id} />
+            <Errors
+              exerciseData={exerciseData}
+              id={id}
+              setShowDangerAlert={setShowDangerAlert}
+            />
             {query !== "" && (
               <div style={{ margin: 5 }}>
                 <SearchResult query={query} token={token} />
