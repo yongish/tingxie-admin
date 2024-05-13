@@ -3,8 +3,9 @@ import Select from "react-select";
 import { getHost } from "../utils/env";
 import { options } from "./errorValues";
 import WrongAnswers from "./WrongAnswers";
+import OtherErrorDescription from "./OtherErrorDescription";
 
-const Errors = ({ exerciseData, id, setShowDangerAlert }) => {
+const Errors = ({ id, setShowDangerAlert }) => {
   const [errors, setErrors] = useState([]);
 
   useEffect(() => {
@@ -34,8 +35,6 @@ const Errors = ({ exerciseData, id, setShowDangerAlert }) => {
     }
   };
 
-  console.log("errors", errors);
-
   return (
     <div>
       <Select
@@ -47,6 +46,12 @@ const Errors = ({ exerciseData, id, setShowDangerAlert }) => {
       />
       {errors.map((e) => e.value).includes(4) && (
         <WrongAnswers id={id} setShowDangerAlert={setShowDangerAlert} />
+      )}
+      {errors.map((e) => e.value).includes(5) && (
+        <OtherErrorDescription
+          id={id}
+          setShowDangerAlert={setShowDangerAlert}
+        />
       )}
     </div>
   );

@@ -49,7 +49,7 @@ const WrongAnswers = ({ id, setShowDangerAlert }) => {
   };
 
   return (
-    <div style={{ margin: 10 }}>
+    <div style={{ margin: 5 }}>
       <h6>Wrong answers</h6>
       <div>
         {wrongAnswers.length === 0 && (
