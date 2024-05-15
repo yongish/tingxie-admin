@@ -2,16 +2,16 @@ import React, { useEffect, useState } from "react";
 import { Table } from "react-bootstrap";
 import { getHost } from "../utils/env";
 
-const SearchResult = ({ query, token }) => {
+const SearchResult = ({ id, query, token }) => {
   const [results, setResults] = useState([]);
 
   useEffect(() => {
-    fetch(`${getHost()}exercise-data/search/${query}`, {
+    fetch(`${getHost()}exercise-data/${id}/search/${query}`, {
       headers: { Authorization: `${token}` },
     })
       .then((response) => response.json())
       .then((data) => setResults(data));
-  }, [query, token]);
+  }, [id, query, token]);
 
   if (results.length === 0) {
     return <p>No duplicate exercises found.</p>;

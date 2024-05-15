@@ -45,11 +45,7 @@ const Exercise = () => {
     }
   }, [location.state?.token]);
 
-  const exerciseIds = localStorage
-    .getItem("exerciseIds")
-    .slice(1, -1)
-    .split(",")
-    .map((id) => parseInt(id));
+  const exerciseIds = localStorage.getItem("exerciseIds").slice(1, -1).split(',').map(id => parseInt(id));
 
   const navigate = useNavigate();
 
@@ -326,7 +322,7 @@ const Exercise = () => {
             <Errors id={id} setShowDangerAlert={setShowDangerAlert} />
             {query !== "" && (
               <div style={{ margin: 5 }}>
-                <SearchResult query={query} token={token} />
+                <SearchResult id={id} query={query} token={token} />
               </div>
             )}
           </div>
