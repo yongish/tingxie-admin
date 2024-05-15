@@ -29,17 +29,24 @@ const SearchResult = ({ query, token }) => {
       </thead>
       <tbody>
         {results.map((item, i) => {
-          const { id, source, sourceUrl, rawString, isDraft } = item;
-          const firstIndex = Math.max(0, rawString.indexOf(query[0]) - 10);
+          const { id, source, rawString, isDraft } = item;
+          const firstIndex = Math.max(0, rawString.indexOf(query) - 10);
           const lastIndex = Math.min(
-            query.length - 1,
-            rawString.indexOf(query[query.length - 1]) + 10
+            rawString.length - 1,
+            rawString.indexOf(query) + 10
           );
           return (
             <tr key={id}>
               <td>{i + 1}</td>
-              {/* todo: replace with link */}
-              <td>{source}</td>
+              <td>
+                <a
+                  href={`${window.location.protocol}//${window.location.host}/exercise/${id}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {source}
+                </a>
+              </td>
               <td>{(!isDraft).toString()}</td>
               <td>{rawString.substring(firstIndex, lastIndex)}</td>
             </tr>

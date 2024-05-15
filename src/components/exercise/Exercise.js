@@ -18,8 +18,39 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/$
 const Exercise = () => {
   const { id } = useParams();
   const location = useLocation();
-  const token = location.state.token;
-  const exerciseIds = location.state.exerciseIds;
+
+  const [token, setToken] = useState(null);
+  useEffect(() => {
+    const t = location.state?.token;
+    if (t) {
+      setToken(t);
+    } else {
+      const user = auth.currentUser;
+      user
+        .getIdToken(true)
+        .then((token) => {
+          setToken(token);
+          fetch(`${getHost()}tokens`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email: user.email,
+              token,
+            }),
+          });
+        })
+        .catch((error) => console.error(error));
+    }
+  }, [location.state?.token]);
+
+  const exerciseIds = localStorage
+    .getItem("exerciseIds")
+    .slice(1, -1)
+    .split(",")
+    .map((id) => parseInt(id));
+
   const navigate = useNavigate();
 
   const [exerciseData, setExerciseData] = useState({});

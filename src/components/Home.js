@@ -58,7 +58,11 @@ const Home = () => {
       .then((data) => {
         const indexedData = data.map((item, i) => ({ ...item, index: i }));
         setExerciseMetadata(indexedData);
-        setExerciseIds(indexedData.map((item) => item.id));
+
+        const exerciseIds = indexedData.map((item) => item.id);
+        setExerciseIds(exerciseIds);
+        localStorage.setItem("exerciseIds", JSON.stringify(exerciseIds));
+
         setFilteredExerciseMetadata(indexedData);
       });
   }, [token]);
