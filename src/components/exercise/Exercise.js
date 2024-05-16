@@ -45,7 +45,11 @@ const Exercise = () => {
     }
   }, [location.state?.token]);
 
-  const exerciseIds = localStorage.getItem("exerciseIds").slice(1, -1).split(',').map(id => parseInt(id));
+  const exerciseIds = localStorage
+    .getItem("exerciseIds")
+    .slice(1, -1)
+    .split(",")
+    .map((id) => parseInt(id));
 
   const navigate = useNavigate();
 
@@ -122,7 +126,9 @@ const Exercise = () => {
         }
       })
       .catch((error) => console.error(error))
-      .finally(() => setIsLoading(false));
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   if (isLoading) {
@@ -154,9 +160,11 @@ const Exercise = () => {
         <div style={{ display: "flex", flexDirection: "column" }}>
           <Document file={sourceUrl} style={{ border: "1px solid black" }}>
             <Tabs
-              defaultActiveKey="questionPageNumber"
+              defaultActiveKey={activeKey}
               className="mb-3"
-              onSelect={(key) => setActiveKey(key)}
+              onSelect={(key) => {
+                setActiveKey(key);
+              }}
             >
               <Tab eventKey="questionPageNumber" title="问题页">
                 <div>
