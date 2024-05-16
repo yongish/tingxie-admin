@@ -41,7 +41,7 @@ const Errors = ({ id, setShowDangerAlert }) => {
         value={errors}
         options={options}
         isMulti={true}
-        placeholder="Errors"
+        placeholder="错误"
         onChange={(errorOptions) => upsertErrors(errorOptions)}
       />
       {errors.map((e) => e.value).includes(4) && (

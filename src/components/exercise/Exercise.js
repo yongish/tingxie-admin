@@ -276,7 +276,7 @@ const Exercise = () => {
               }}
               value={rawString}
               onChange={(e) =>
-                putExercise({ ...exerciseData, rawString: e.target.value })
+                setExerciseData({ ...exerciseData, rawString: e.target.value })
               }
               cols={80}
               ref={myRef}
