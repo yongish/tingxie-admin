@@ -63,6 +63,7 @@ const Exercise = () => {
   const myRef = useRef(null);
 
   const {
+    source,
     sourceUrl,
     rawString,
     questionPageNumber,
@@ -187,152 +188,160 @@ const Exercise = () => {
             </Tabs>
           </Document>
         </div>
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <div>
-              <BtnMargin
-                onClick={() =>
-                  putExercise({
-                    ...exerciseData,
-                    [activeKey]: exerciseData[activeKey] - 1,
-                  })
-                }
-              >
-                上一页
-              </BtnMargin>
-              <BtnMargin
-                onClick={() =>
-                  putExercise({
-                    ...exerciseData,
-                    [activeKey]: exerciseData[activeKey] + 1,
-                  })
-                }
-              >
-                下一页
-              </BtnMargin>
-            </div>
-            <div style={{ display: "flex", alignItems: "center" }}>
-              {showDangerAlert && (
-                <Alert variant="danger" style={{ marginRight: 10 }}>
-                  错误。 联络志勇。此练习已被标记为有错误。
-                </Alert>
-              )}
-              {showSavedAlert && (
-                <Alert variant="success" style={{ marginRight: 10 }}>
-                  保存成功
-                </Alert>
-              )}
-              {/* <Form.Check
-                type="checkbox"
-                label="有错误"
-                checked={invalid}
-                onChange={(e) => putInvalid(e.target.checked)}
-              /> */}
-              <div>
-                {prevExerciseId !== -1 && (
-                  <BtnMargin
-                    onClick={() =>
-                      navigate(`/exercise/${prevExerciseId}`, {
-                        state: { token, exerciseIds },
-                      })
-                    }
-                  >
-                    上一个练习
-                  </BtnMargin>
-                )}
-                {nextExerciseId !== -1 && (
-                  <BtnMargin
-                    onClick={() =>
-                      navigate(`/exercise/${nextExerciseId}`, {
-                        state: { token, exerciseIds },
-                      })
-                    }
-                  >
-                    下一个练习
-                  </BtnMargin>
-                )}
-              </div>
-            </div>
-          </div>
-          <Form.Select
-            aria-label="Exercise Type"
-            style={{ width: "fit-content", margin: 5 }}
-            onChange={(e) => {
-              const newExerciseData = {
-                ...exerciseData,
-                isDraft: true,
-                exerciseTypeId: parseInt(e.target.value),
-              };
-              putExercise(newExerciseData);
-            }}
-            value={exerciseData.exerciseTypeId}
-          >
-            <option value={0}>短文填空</option>
-            <option value={1}>语文应用</option>
-          </Form.Select>
-          <div>
-            <TextareaAutosize
-              autoFocus
-              onFocus={(e) => {
-                setTimeout(() => (e.target.selectionEnd = 0), 0);
-              }}
-              value={rawString}
-              onChange={(e) =>
-                setExerciseData({ ...exerciseData, rawString: e.target.value })
-              }
-              cols={80}
-              ref={myRef}
-              onMouseUp={() =>
-                setQuery(
-                  myRef.current.value.substring(
-                    myRef.current.selectionStart,
-                    myRef.current.selectionEnd
-                  )
-                )
-              }
-            />
+        <div>
+          <div style={{ marginLeft: 5 }}>{source}</div>
+          <div style={{ display: "flex", flexDirection: "column" }}>
             <div
               style={{
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
-                marginBottom: 8,
               }}
             >
               <div>
-                <Button
-                  onClick={() => navigate("/", { state: { token } })}
-                  variant="secondary"
+                <BtnMargin
+                  onClick={() =>
+                    putExercise({
+                      ...exerciseData,
+                      [activeKey]: exerciseData[activeKey] - 1,
+                    })
+                  }
                 >
-                  取消（返回首页）
-                </Button>
+                  上一页
+                </BtnMargin>
+                <BtnMargin
+                  onClick={() =>
+                    putExercise({
+                      ...exerciseData,
+                      [activeKey]: exerciseData[activeKey] + 1,
+                    })
+                  }
+                >
+                  下一页
+                </BtnMargin>
+              </div>
+              <div style={{ display: "flex", alignItems: "center" }}>
+                {showDangerAlert && (
+                  <Alert variant="danger" style={{ marginRight: 10 }}>
+                    错误。 联络志勇。此练习已被标记为有错误。
+                  </Alert>
+                )}
+                {showSavedAlert && (
+                  <Alert variant="success" style={{ marginRight: 10 }}>
+                    保存成功
+                  </Alert>
+                )}
+                {/* <Form.Check
+                type="checkbox"
+                label="有错误"
+                checked={invalid}
+                onChange={(e) => putInvalid(e.target.checked)}
+              /> */}
+                <div>
+                  {prevExerciseId !== -1 && (
+                    <BtnMargin
+                      onClick={() =>
+                        navigate(`/exercise/${prevExerciseId}`, {
+                          state: { token, exerciseIds },
+                        })
+                      }
+                    >
+                      上一个练习
+                    </BtnMargin>
+                  )}
+                  {nextExerciseId !== -1 && (
+                    <BtnMargin
+                      onClick={() =>
+                        navigate(`/exercise/${nextExerciseId}`, {
+                          state: { token, exerciseIds },
+                        })
+                      }
+                    >
+                      下一个练习
+                    </BtnMargin>
+                  )}
+                </div>
+              </div>
+            </div>
+            <Form.Select
+              aria-label="Exercise Type"
+              style={{ width: "fit-content", margin: 5 }}
+              onChange={(e) => {
+                const newExerciseData = {
+                  ...exerciseData,
+                  isDraft: true,
+                  exerciseTypeId: parseInt(e.target.value),
+                };
+                putExercise(newExerciseData);
+              }}
+              value={exerciseData.exerciseTypeId}
+            >
+              <option value={0}>短文填空</option>
+              <option value={1}>语文应用</option>
+            </Form.Select>
+            <div>
+              <TextareaAutosize
+                autoFocus
+                onFocus={(e) => {
+                  setTimeout(() => (e.target.selectionEnd = 0), 0);
+                }}
+                value={rawString}
+                onChange={(e) =>
+                  setExerciseData({
+                    ...exerciseData,
+                    rawString: e.target.value,
+                  })
+                }
+                cols={80}
+                ref={myRef}
+                onMouseUp={() =>
+                  setQuery(
+                    myRef.current.value.substring(
+                      myRef.current.selectionStart,
+                      myRef.current.selectionEnd
+                    )
+                  )
+                }
+              />
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginBottom: 8,
+                }}
+              >
+                <div>
+                  <Button
+                    onClick={() => navigate("/", { state: { token } })}
+                    variant="secondary"
+                  >
+                    取消（返回首页）
+                  </Button>
+                  <Button
+                    onClick={() =>
+                      putExercise({ ...exerciseData, isDraft: true })
+                    }
+                    style={{ marginLeft: "5px" }}
+                  >
+                    保存草稿
+                  </Button>
+                </div>
                 <Button
                   onClick={() =>
-                    putExercise({ ...exerciseData, isDraft: true })
+                    putExercise({ ...exerciseData, isDraft: false })
                   }
-                  style={{ marginLeft: "5px" }}
                 >
-                  保存草稿
+                  发布
                 </Button>
               </div>
-              <Button
-                onClick={() => putExercise({ ...exerciseData, isDraft: false })}
-              >
-                发布
-              </Button>
+              <Errors id={id} setShowDangerAlert={setShowDangerAlert} />
+              {query !== "" && (
+                <div style={{ margin: 5 }}>
+                  <SearchResult id={id} query={query} token={token} />
+                </div>
+              )}
             </div>
-            <Errors id={id} setShowDangerAlert={setShowDangerAlert} />
-            {query !== "" && (
-              <div style={{ margin: 5 }}>
-                <SearchResult id={id} query={query} token={token} />
-              </div>
-            )}
           </div>
         </div>
       </div>
