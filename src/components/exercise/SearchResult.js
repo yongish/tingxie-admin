@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Table } from "react-bootstrap";
+import { Spinner, Table } from "react-bootstrap";
 import { getHost } from "../utils/env";
 
 const SearchResult = ({ id, query, token }) => {
+  const [loading, setLoading] = useState(true);
   const [results, setResults] = useState([]);
 
   useEffect(() => {
@@ -10,8 +11,26 @@ const SearchResult = ({ id, query, token }) => {
       headers: { Authorization: `${token}` },
     })
       .then((response) => response.json())
-      .then((data) => setResults(data));
+      .then((data) => {
+        setResults(data);
+        setLoading(false);
+      });
   }, [id, query, token]);
+
+  if (isLoading) {
+    return (
+      <div
+        style={{
+          position: "absolute",
+          left: "50%",
+          top: "50%",
+          transform: "translate(-50%, -50%)",
+        }}
+      >
+        <Spinner />
+      </div>
+    );
+  }
 
   if (results.length === 0) {
     return <p>No duplicate exercises found.</p>;
