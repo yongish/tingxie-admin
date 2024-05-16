@@ -6,6 +6,7 @@ import styled from "styled-components";
 import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import Spinner from "react-bootstrap/Spinner";
 import Table from "react-bootstrap/Table";
 import { getHost } from "./utils/env";
 import { options } from "./exercise/errorValues";
@@ -21,6 +22,7 @@ const Home = () => {
     localStorage.getItem("showNotPublished") === "true"
   );
 
+  const [loading, isLoading] = useState(true);
   const [token, setToken] = useState(null);
   const location = useLocation();
   useEffect(() => {
@@ -128,7 +130,17 @@ const Home = () => {
           />
         </div>
       </DivOppositeEnds>
-      <Table striped bordered hover>
+      {loading && <div
+        style={{
+          position: "absolute",
+          left: "50%",
+          top: "50%",
+          transform: "translate(-50%, -50%)",
+        }}
+      >
+        <Spinner />
+      </div>}
+      {!loading && <Table striped bordered hover>
         <thead>
           <tr>
             <th>#</th>
@@ -216,7 +228,7 @@ const Home = () => {
             );
           })}
         </tbody>
-      </Table>
+      </Table>}
     </DivMargin>
   );
 };
