@@ -68,6 +68,7 @@ const Exercise = () => {
     rawString,
     questionPageNumber,
     answerPageNumber,
+    isDraft,
     // invalid,
   } = exerciseData;
 
@@ -327,13 +328,17 @@ const Exercise = () => {
                     保存草稿
                   </Button>
                 </div>
-                <Button
-                  onClick={() =>
-                    putExercise({ ...exerciseData, isDraft: false })
-                  }
-                >
-                  发布
-                </Button>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <div>{isDraft ? "未发布" : "已发布"}</div>
+                  <Button
+                    style={{ marginLeft: 10 }}
+                    onClick={() =>
+                      putExercise({ ...exerciseData, isDraft: false })
+                    }
+                  >
+                    发布
+                  </Button>
+                </div>
               </div>
               <Errors id={id} setShowDangerAlert={setShowDangerAlert} />
               {query !== "" && (
