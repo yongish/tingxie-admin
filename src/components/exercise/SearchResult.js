@@ -17,7 +17,7 @@ const SearchResult = ({ id, query, token }) => {
       });
   }, [id, query, token]);
 
-  if (isLoading) {
+  if (loading) {
     return (
       <div
         style={{

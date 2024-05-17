@@ -22,7 +22,7 @@ const Home = () => {
     localStorage.getItem("showNotPublished") === "true"
   );
 
-  const [loading, isLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [token, setToken] = useState(null);
   const location = useLocation();
   useEffect(() => {
@@ -65,6 +65,7 @@ const Home = () => {
         setExerciseIds(exerciseIds);
         localStorage.setItem("exerciseIds", JSON.stringify(exerciseIds));
 
+        setLoading(false);
         setFilteredExerciseMetadata(indexedData);
       });
   }, [token]);
